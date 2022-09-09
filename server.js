@@ -1,9 +1,6 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2")
 const consoleTable = require("console.table");
-// const sequelize = require("./config/connection.js");
-
-
 
 const db = mysql.createConnection(
   {
@@ -17,10 +14,10 @@ const db = mysql.createConnection(
   console.log(`Connected to the company database.`)
 );
 
-
 const viewDeparments = () => {
     db.query('SELECT * FROM department;', function (err, results) {
         console.table(results);
+        mainMenu();
       });
       
 }
@@ -28,13 +25,16 @@ const viewDeparments = () => {
 const viewRoles = () => {
     db.query('SELECT * FROM roles', function (err, results) {
         console.table(results);
+        mainMenu();
       });
+
       
 }
 
 const viewEmployees = () => {
     db.query('SELECT * FROM employee', function (err, results) {
         console.table(results);
+        mainMenu();
       });
       
 }
@@ -109,10 +109,7 @@ const launchMngrView = () => {
                 })
             })
         })
-    })
-
-    ;
-    
+    })    
 }
 
 // works 
@@ -128,9 +125,6 @@ const addDepartment = () => {
             }
         ]
     ).then( (answer ) => {
-        // db.query(`INSERT INTO department (name)
-        //         VALUES ("${answer.departmentTitle}");`);
-        // viewDeparments();
 
         db.promise().query("SELECT * FROM department").then( (res) => {
             // console.log(res[0]);
@@ -149,8 +143,6 @@ const addDepartment = () => {
         db.query(`INSERT INTO department(name) VALUES ("${answer.departmentTitle}")`);
 
         mainMenu();
-
-            // Run home menu
 
         })
     });
@@ -317,8 +309,6 @@ const updateEmployee = () => {
 
 }
 
-
-
 const mainMenu = () => {
     const menuPrompt = inquirer.createPromptModule();
 
@@ -356,7 +346,7 @@ const mainMenu = () => {
                 updateEmployee();      
             break;
             case "Quit":
-
+                process.exit(0);
             break;
         }
        
@@ -364,8 +354,3 @@ const mainMenu = () => {
 }
 
 mainMenu();
-
-// const startPrompt = inquirer.createPromptModule();
-
-;
-
