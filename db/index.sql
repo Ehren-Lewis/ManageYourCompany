@@ -1,10 +1,10 @@
 USE company;
 
 -- SELECT * FROM department;
--- SELECT * FROM roles;
+SELECT * FROM roles;
 
 
-SELECT * FROM employee;
+-- SELECT * FROM employee;
 
 -- DESCRIBE department;
 
