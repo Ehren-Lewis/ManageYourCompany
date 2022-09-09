@@ -9,8 +9,6 @@ class Employee {
 
 }
 
-
-
 class Manager extends Employee {
     constructor() {
 

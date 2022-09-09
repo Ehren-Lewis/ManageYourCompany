@@ -104,7 +104,7 @@ const addRole = () => {
                 "type": "input"
             },
             {
-                "name":"roleSalaray",
+                "name":"roleSalary",
                 "message": "What salary of the role?",
                 "type":"number"
             },
@@ -115,57 +115,108 @@ const addRole = () => {
         }
 
         ]
-    ).then( (answer ) => {
+    ).then( ( answer ) => {
 
-        var desiredDept = "";
-        var desiredDeptNumb = "";
+        // var desiredDept = "";
+        // var desiredDeptNumb = "";
 
-        db.promise().query("SELECT * FROM department").then( (res) => {
-            const queryRes = res[0];
-            for (let i = 0; i < queryRes.length; i++) {
-                if (queryRes[i].name.toLowerCase() == answer.roleDepartment.toLowerCase()) { 
-                    console.log("Department found!");
-                    desiredDept = queryRes[i].name;
-                }
-            }
+        // // db.promise().query("SELECT * FROM department").then( (res) => {
+        // //     const queryRes = res[0];
+        // //     for (let i = 0; i < queryRes.length; i++) {
+        // //         if (queryRes[i].name.toLowerCase() == answer.roleDepartment.toLowerCase()) { 
+        // //             console.log("Department found!");
+        // //             desiredDept = queryRes[i].name;
+        // //         }
+        // //     }
 
-            // if (desiredDept == "") {
-            //     console.log("Department couldn't be found");
-            //     return;
-            // }
-        }).then (
-            db.promise().query("SELECT * FROM roles").then( (res) => {
-                console.log(desiredDept);
-                // console.log(res[0]);
-                const queryRes = res[0];
-                for (let i = 0; i < queryRes.length; i++) {
-                    if (answer.roleTitle.toLowerCase() == queryRes[i].title.toLowerCase()) {
-                        // console.log("This roles has already been added");
-                        // Run home menu
-                        return;
-                    }          
-                }
-            console.log("Adding the role!");  
-            
-            // db.query(`INSERT INTO role (name) VALUES ("${answer.roleTitle}")`);
-    
-                // Run home menu
-    
-            }))
-        });
+        //     // if (desiredDept == "") {
+        //     //     console.log("Department couldn't be found");
+        //     //     return;
+        //     // }
+        // })
+        db.promise().query(`SELECT * FROM department WHERE name="${answer.roleDepartment}"`).then( (res) => {
+
+           const result = res[0];
+
+           return [answer, result];
+
+       
+           
         
+        }).then( (ans) => {
+            db.promise().query(`INSERT INTO roles (title, salary, department_id)
+            VALUES ("${ans[0].roleTitle}", ${ans[0].roleSalary}, ${ans[1][0].id});`);
+            console.log("Success");
+        })
     }
- 
+    )
         // process.exit(0);
+}
 
-
-
-
-addRole();
 
 const addEmployee = () => {
 
+    const addNewEmployee = inquirer.createPromptModule();
+
+    const name = db.promise().query("SELECT title FROM roles").then( (res) => {
+        // console.log(res[0]);
+        // const newArr = [for (x of res[0]) x.title];
+        let x = res[0].map(ele => ele.title);
+        return x;
+    }).then( ans1 => {
+        db.promise().query("SELECT first_name FROM employee WHERE manager_id IS NULL").then (res => {
+            let managers= res[0].map(ele => ele.first_name);
+            return [ans1, managers];
+        }).then( ans => {
+    addNewEmployee(
+        [
+            {
+                "name":"employeeFName",
+                "message": "What is the first name of the new employee?",
+                "type": "input"
+            },
+            {
+                "name":"employeeLName",
+                "message": "What is the last name of the new employee?",
+                "type":"input"
+            },
+            {
+                "name":"employeeRole",
+                "message": "What role does this employee belong to?",
+                "type":"list",
+                choices: ans[0]
+            },
+            {
+                "name":"employeeManager",
+                "message": "What manager does this employee belong to?",
+                "type":"list",
+                "choices":[...ans[1], "NULL"]
+            }
+
+        ]
+    ).then( ( answer ) => {
+        db.promise().query(`SELECT id FROM roles WHERE title="${answer.employeeRole}"`).then( (res) => {
+            return [res[0][0].id, answer.employeeManager, answer.employeeFName, answer.employeeLName];
+        }).then( (ans) => {
+            db.promise().query(`SELECT id FROM employee WHERE first_name="${ans[1]}"`).then( (res) => {
+
+                if (res[0][0] == undefined) {
+                    db.promise().query(`INSERT INTO employee (first_name, last_name, role_id, manager_id)
+                    VALUES("${ans[2]}", "${ans[3]}", ${ans[0]}, NULL);`);
+                } else {
+                    db.promise().query(`INSERT INTO employee (first_name, last_name, role_id, manager_id)
+                    VALUES ("${ans[2]}", "${ans[3]}", ${ans[0]}, ${res[0][0].id} );`);
+                }
+                console.log('added successfully!')
+            })
+        }
+        )
+    }
+    )})
+})
 }
+
+
 
 const updateEmployee = () => {
 
@@ -183,6 +234,4 @@ const mainMenu = () => {
 
 
 const startPrompt = inquirer.createPromptModule();
-
-
 
