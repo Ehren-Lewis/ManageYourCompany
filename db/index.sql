@@ -11,17 +11,17 @@ USE company;
 -- JOIN employee manager ON employees.manager_id = manager.id;
 
 
-SELECT
-    Employees.Id,
-        Employees.first_name,
-        Employees.last_name,
-        -- Employees.manager_id,
-        Manager.first_name AS ManagerName,
-        fullRoles.title
-FROM employee Employees
-LEFT JOIN employee Manager
-ON Employees.manager_id = Manager.id
-JOIN roles fullRoles ON fullRoles.id = Employees.role_id;
+-- SELECT
+--     Employees.Id,
+--         Employees.first_name,
+--         Employees.last_name,
+--         -- Employees.manager_id,
+--         Manager.first_name AS ManagerName,
+--         fullRoles.title
+-- FROM employee Employees
+-- LEFT JOIN employee Manager
+-- ON Employees.manager_id = Manager.id
+-- JOIN roles fullRoles ON fullRoles.id = Employees.role_id;
 
 -- SELECT * FROM employee;
 
