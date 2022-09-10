@@ -40,7 +40,7 @@ Some challenges I faced include connecting the the database, querying the databa
 
 This project will automatically launch once server file has been run. Then, you are asked to choose from a list of choices, such as view employees or add roles. Choose any of the actions, then complete the necessary prompts or finish viewing whatever information is presented. To exit the application, select the quit option and the application will finish.
 
-video link: https://drive.google.com/file/d/1XWy4HsgJk5v1zCjEbVSDL7oe-wD04oqt/view
+video link: chrome-extension://mmeijimgabbpbgpdklnllpncmdofkcpn/app.html#/files/5816ec3a-4d19-49c8-y9eb-b0c3af562844
 
 ![Image of start of the prompts](/Assets/images/firstLoad.png)
 ![Image of adding a department](/Assets/images/addingDepartment.png)

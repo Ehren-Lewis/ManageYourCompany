@@ -1,8 +1,27 @@
 USE company;
 
 -- SELECT * FROM department;
-SELECT * FROM roles;
+-- SELECT * FROM roles;
 
+-- SELECT roles.id, roles.title, roles.salary, department.name AS department FROM roles 
+-- LEFT JOIN department
+-- ON roles.department_id = department.id;
+
+-- SELECT employee.id, employee.first_name, employee.last_name, manager.firstName as manager_name  FROM employee employees
+-- JOIN employee manager ON employees.manager_id = manager.id;
+
+
+SELECT
+    Employees.Id,
+        Employees.first_name,
+        Employees.last_name,
+        -- Employees.manager_id,
+        Manager.first_name AS ManagerName,
+        fullRoles.title
+FROM employee Employees
+LEFT JOIN employee Manager
+ON Employees.manager_id = Manager.id
+JOIN roles fullRoles ON fullRoles.id = Employees.role_id;
 
 -- SELECT * FROM employee;
 
@@ -36,6 +55,10 @@ SELECT * FROM roles;
 --     FOREIGN KEY (role_id)
 --     REFERENCES roles(id)
 -- );
+
+
+-- JOIN role.derpartment_id ON department.id
+-- JOIN 
 
 
 -- DESCRIBE department;

@@ -20,22 +20,50 @@ const viewDeparments = () => {
         mainMenu();
       });
       
+ 
 }
 
 const viewRoles = () => {
-    db.query('SELECT * FROM roles', function (err, results) {
-        console.table(results);
+    // db.query('SELECT * FROM roles', function (err, results) {
+    //     console.table(results);
+    //     mainMenu();
+    //   });
+
+    db.query(`
+    SELECT roles.id, roles.title, roles.salary, department.name AS department FROM roles 
+LEFT JOIN department
+ON roles.department_id = department.id;`, (err, res) => {
+        console.table(res);
         mainMenu();
-      });
+    });
+
 
       
 }
 
+
 const viewEmployees = () => {
-    db.query('SELECT * FROM employee', function (err, results) {
-        console.table(results);
-        mainMenu();
-      });
+    // db.query('SELECT * FROM employee', function (err, results) {
+    //     console.table(results);
+    //     mainMenu();
+    //   });
+
+      db.query(`
+      SELECT
+    Employees.Id,
+        Employees.first_name,
+        Employees.last_name,
+        Manager.first_name AS ManagerName,
+        fullRoles.title
+FROM employee Employees
+LEFT JOIN employee Manager
+ON Employees.manager_id = Manager.id
+JOIN roles fullRoles ON fullRoles.id = Employees.role_id;`, (err, res) => {
+    console.table(res);
+    
+  mainMenu();
+  });
+
       
 }
 
